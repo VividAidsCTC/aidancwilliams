@@ -1,0 +1,150 @@
+/* --- THE STRICT FOUNDATION --- */
+:root {
+    --font-size: 12pt;
+    --font-family: 'Courier New', Courier, monospace;
+    --bg-color: #ffffff;
+    --text-color: #000000;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    overflow-x: hidden; /* Hide scrollbars, but we will bounce off edges */
+    overflow-y: hidden; 
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    white-space: nowrap; /* Prevent text wrapping during movement */
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* --- LAYOUTS --- */
+#app {
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 100px;
+}
+
+.project-item {
+    width: fit-content;
+    user-select: none;
+    /* Important for physics to calculate bounds correctly */
+    display: block; 
+}
+
+/* Wild items need to be on top to be seen bouncing */
+.wild {
+    z-index: 1000;
+    color: blue; /* Optional: Visual cue that it's wild */
+}
+
+.project-detail {
+    display: none;
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 100px;
+    overflow-y: auto;
+    height: 100vh;
+}
+
+.detail-images img {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+    filter: grayscale(100%);
+    transition: filter 0.3s;
+    display: block;
+}
+
+.back-btn {
+    position: fixed;
+    top: 40px;
+    left: 40px;
+    z-index: 100;
+    border-bottom: 1px solid black;
+}
+
+/* --- THE FLOATING HOVER IMAGE --- */
+#hover-reveal {
+    position: fixed;
+    pointer-events: none;
+    width: 300px;
+    height: auto;
+    z-index: 50;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.2s ease;
+    mix-blend-mode: multiply;
+    filter: grayscale(100%);
+}
+
+/* --- GLITCH SQUARES --- */
+.glitch-square {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    background: white;
+    z-index: 999;
+    pointer-events: none;
+    mix-blend-mode: exclusion;
+}
+
+/* --- GHOST ECHOES --- */
+.ghost-echo {
+    position: fixed;
+    pointer-events: none; /* Can't click ghosts */
+    z-index: -1;          /* Sit behind everything */
+    opacity: 0.4;
+    filter: blur(1px) grayscale(100%);
+    transition: all 2s ease-out; /* The fade-out duration */
+    color: #999;          /* Slightly lighter text for ghosts */
+}
+
+/* Optional: Make them distort as they vanish */
+.ghost-echo.fading {
+    opacity: 0;
+    transform: scale(1.1) skewX(20deg);
+    filter: blur(8px);
+}
+
+.project-list {
+    position: relative; /* Ensures ghosts spawn relative to the list container */
+}
+
+.ghost-echo {
+    position: absolute;
+    pointer-events: none; /* Click-through */
+    z-index: -1;          /* Behind the real text */
+    opacity: 0.6;         /* Start semi-transparent */
+    color: #aaaaaa;       /* Slightly lighter gray */
+    transition: all 5s ease-out; /* The 5-second fade */
+    filter: blur(0px);
+    mix-blend-mode: multiply;
+}
+
+.ghost-echo.fading {
+    opacity: 0;
+    filter: blur(4px);    /* Blur as it vanishes */
+    transform: scale(1.1); /* Subtle expansion */
+}
