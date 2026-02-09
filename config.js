@@ -3,17 +3,65 @@ const MAX_TIME_MINUTES = 10;
 const START_TIME = Date.now();
 const WILD_EVENT_INTERVAL = 45000; 
 
-// Fake Data
-const projects = Array.from({ length: 10 }, (_, i) => ({
-    id: i,
-    title: `PROJECT_0${i+1}_${['ALPHA', 'VOID', 'STRUCTURE', 'FLUX', 'ECHO', 'STATIC', 'NULL', 'CORE', 'EDGE', 'LOOP'][i]}`,
-    preview: `https://picsum.photos/seed/${i + 100}/400/300`,
-    images: [
-        `https://picsum.photos/seed/${i + 200}/600/400`,
-        `https://picsum.photos/seed/${i + 300}/600/400`
-    ],
-    bio: `System analysis for Project 0${i+1}. The objective was to strip away functionality until only form remained.`
-}));
+// --- Projects Page
+const projects = [
+    {
+        id: 0,
+        title: "First PROJECT", 
+        preview: "https://example.com/some-online-image.jpg", 
+        images: [
+            "https://example.com/detail-1.jpg",
+            "https://example.com/detail-2.jpg"
+        ],
+        bio: "You can also use online links for images if you don't want to host them yourself."
+    },
+
+    {
+        id: 1,
+        title: "Second PROJECT", 
+        preview: "https://example.com/some-online-image.jpg", 
+        images: [
+            "https://example.com/detail-1.jpg",
+            "https://example.com/detail-2.jpg"
+        ],
+        bio: "You can also use online links for images if you don't want to host them yourself."
+    },
+
+    {
+        id: 2,
+        title: "THIRD PROJECT", 
+        preview: "https://example.com/some-online-image.jpg", 
+        images: [
+            "https://example.com/detail-1.jpg",
+            "https://example.com/detail-2.jpg"
+        ],
+        bio: "You can also use online links for images if you don't want to host them yourself."
+    },
+
+    {
+        id: 3,
+        title: "Fourth PROJECT", 
+        preview: "https://example.com/some-online-image.jpg", 
+        images: [
+            "https://example.com/detail-1.jpg",
+            "https://example.com/detail-2.jpg"
+        ],
+        bio: "You can also use online links for images if you don't want to host them yourself."
+    },
+
+    {
+        id: 4,
+        title: "Fifth PROJECT", 
+        preview: "https://example.com/some-online-image.jpg", 
+        images: [
+            "https://example.com/detail-1.jpg",
+            "https://example.com/detail-2.jpg"
+        ],
+        bio: "You can also use online links for images if you don't want to host them yourself."
+    }
+
+    
+];
 
 // --- 2. INITIALIZATION ---
 const listView = document.getElementById('list-view');
