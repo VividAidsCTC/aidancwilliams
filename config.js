@@ -28,7 +28,7 @@ const projects = [
             "Obelisk/charcoal-Large.jpeg",
 
         ],
-        bio: "In so many of our lives, stillness is missing. The weekday morning is a rushed process: throwing on clothes, a quick cup of coffee or tea and out to start one’s day. Obelisk aims to bring back a careful moment of rest. Obelisk is more than a morning routine, it is an innovative use of robotics that brings together the ceremony of tea drinking with meditation. Tea is inherently spiritual, both in substance and pratice. The beverage is consumed by an estimated 2 billion people everyday in countless ceremonies. As the revered Buddhist monk Popchong Sunim puts it, “Tea is a path to the universe.” Obelisks too are paths to the universe; totems, spires and obelisks were built through millennia by disparate cultures, often with the intent of asking for or offering something. Egyptian, American Indian and Aztec culture, all constructed these objects to bring them closer with their deities. Throughout the design process, I held the great minimalists in mind. The goal was to create a device that doesn’t demand attention, in size or form, that fits perfectly into the user’s space. Below are some of my design references"
+        bio: "In so many of our lives, stillness is missing. The weekday morning is a rushed process: throwing on clothes, a quick cup of coffee or tea and out to start one’s day. Obelisk aims to bring back a careful moment of rest. Obelisk is more than a morning routine, it is an innovative use of robotics that brings together the ceremony of tea drinking with meditation. Tea is inherently spiritual, both in substance and pratice. The beverage is consumed by an estimated 2 billion people everyday in countless ceremonies. As the revered Buddhist monk Popchong Sunim puts it, “Tea is a path to the universe.” Obelisks too are paths to the universe; totems, spires and obelisks were built through millennia by disparate cultures, often with the intent of asking for or offering something. Egyptian, American Indian and Aztec culture, all constructed these objects to bring them closer with their deities. Throughout the design process, I held the great minimalists in mind. The goal was to create a device that doesn’t demand attention, in size or form, that fits perfectly into the user’s space. Below are some of my design references."
     },
 
     {
@@ -116,61 +116,46 @@ projects.forEach(p => {
 
 // --- 3. NAVIGATION ---
 function openProject(id) {
-    const p = projects.find(x => x.id === id);
+    // 1. Find the Template in the HTML
+    const template = document.getElementById(`project-${id-0}-content`); // (id-0 ensures it's a number)
     
-    const dTitle = document.getElementById('detail-title');
-    const dBio = document.getElementById('detail-bio');
-    
-    dTitle.innerText = p.title;
-    dBio.innerText = p.bio;
-
-    dTitle.classList.add('entropy-element');
-    dBio.classList.add('entropy-element');
-
-    // --- FIX: STATE SANITIZATION ---
-    // We copy the position (x,y) so it doesn't jump, 
-    // but we RESET the behavior (velocity, wild status)
-    const sourceEl = document.getElementById(`proj-item-${id}`);
-    const sourceState = physicsState.get(sourceEl);
-
-    if (sourceState) {
-        const cleanState = {
-            x: sourceState.x,
-            y: sourceState.y,
-            rotation: 0,                   // Force flat rotation for readability
-            vx: (Math.random() - 0.5),     // New gentle drift
-            vy: (Math.random() - 0.5),     // New gentle drift
-            vr: (Math.random() - 0.5) * 0.1, 
-            isWild: false                  // FORCE CALM
-        };
-        physicsState.set(dTitle, { ...cleanState });
-        physicsState.set(dBio, { ...cleanState });
-    } else {
-        physicsState.delete(dTitle);
-        physicsState.delete(dBio);
+    if (!template) {
+        console.error(`No content found for Project ID ${id}. Make sure <template id="project-${id}-content"> exists in HTML.`);
+        return;
     }
+
+    // 2. Clear current view
+    // We remove everything currently in the detail view to make room for new stuff
+    detailView.innerHTML = ''; 
+
+    // 3. Clone the content and inject it
+    const clone = template.content.cloneNode(true);
+    detailView.appendChild(clone);
+
+    // 4. Setup Physics for the New Elements
+    // We look for anything with class "drift-text" or "drift-media" 
+    // and manually add them to the physics system.
     
-    const imgContainer = document.getElementById('detail-images');
-    imgContainer.innerHTML = '';
+    const newDrifters = detailView.querySelectorAll('.drift-text, .drift-media');
     
-    p.images.forEach(url => {
-        const img = document.createElement('img');
-        img.src = url;
-        img.className = 'entropy-element'; 
-        imgContainer.appendChild(img);
-        initPhysics(img);
+    newDrifters.forEach(el => {
+        el.classList.add('entropy-element'); // Turn on the physics engine for this item
+        initPhysics(el); // Give it a starting push
+        
+        // Fix for Text vs Images constraints
+        // We tag them so the gameLoop knows which constraint to apply (Leash vs Invisible Box)
+        if (el.classList.contains('drift-text')) {
+             el.dataset.type = 'text'; // Helper tag
+        } else {
+             el.dataset.type = 'media';
+        }
     });
 
+    // 5. Switch Screens
     listView.style.display = 'none';
-    detailView.style.display = 'flex';
+    detailView.style.display = 'block'; // Block allows normal scrolling layout if needed
     homeBtn.style.display = 'block';
     hideImg();
-}
-
-function goHome() {
-    detailView.style.display = 'none';
-    listView.style.display = 'flex';
-    homeBtn.style.display = 'none';
 }
 
 // --- 4. HOVER IMAGE ---
@@ -312,29 +297,34 @@ function gameLoop() {
             
         } else if (isDetailItem) {
             // --- 2. PROJECT VIEW: CONSTRAINED DRIFT ---
-            // Linear movement (like home page), but inside an invisible box.
             
-            const driftSpeed = 0.002; // Constant slow drift
-            const rangeLimit = 50;  // Max pixels it can move from center (The Invisible Box)
+            // Check if it is text or media based on the tag we added in openProject
+            const isText = el.dataset.type === 'text' || el.id === 'detail-title' || el.id === 'detail-bio';
+            
+            // CONFIGURATION
+            const driftSpeed = 0.02; 
+            const rangeLimit = 50;  
 
+            // MOVE
             state.x += state.vx * driftSpeed;
             state.y += state.vy * driftSpeed;
 
-            // INVISIBLE BOX LOGIC
-            // If it hits the 50px limit, bounce it back gently
+            // INVISIBLE BOX (Bounce)
             if (state.x > rangeLimit) { state.x = rangeLimit; state.vx = -Math.abs(state.vx); }
             if (state.x < -rangeLimit) { state.x = -rangeLimit; state.vx = Math.abs(state.vx); }
             
             if (state.y > rangeLimit) { state.y = rangeLimit; state.vy = -Math.abs(state.vy); }
             if (state.y < -rangeLimit) { state.y = -rangeLimit; state.vy = Math.abs(state.vy); }
 
-            // ROTATION CLAMP
-            // Allow rotation to drift, but cap it at +/- 2 degrees
-            state.rotation += state.vr * chaos;
-            if (state.rotation > 2) { state.rotation = 2; state.vr *= -1; }
-            if (state.rotation < -2) { state.rotation = -2; state.vr *= -1; }
+            // ROTATION
+            // Text rotates LESS (easier to read), Media rotates MORE (cooler)
+            const maxRot = isText ? 1 : 2; 
 
-        } else {
+            state.rotation += state.vr * chaos;
+            if (state.rotation > maxRot) { state.rotation = maxRot; state.vr *= -1; }
+            if (state.rotation < -maxRot) { state.rotation = -maxRot; state.vr *= -1; }
+
+            } else {
             // --- 3. HOME VIEW: STANDARD DRIFT ---
             const currentSpeed = 0.0005 + (chaos * 0.02); 
             

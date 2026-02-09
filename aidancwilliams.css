@@ -148,3 +148,29 @@ a:hover {
     filter: blur(4px);    /* Blur as it vanishes */
     transform: scale(1.1); /* Subtle expansion */
 }
+
+/* Ensure the layout holds together */
+.project-layout {
+    width: 100%;
+    max-width: 800px; /* Or whatever width you prefer */
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 10vh;
+}
+
+/* Ensure Drift Items can actually move */
+.drift-text, .drift-media {
+    position: relative; /* Required for physics transform to work */
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 2rem; /* Spacing between items */
+}
+
+/* Specific styling for your text */
+.bio-text {
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    text-align: left; /* Easier to read paragraphs */
+}
