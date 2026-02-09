@@ -7,8 +7,8 @@ const WILD_EVENT_INTERVAL = 45000;
 const projects = [
     {
         id: 0,
-        title: "First PROJECT", 
-        preview: "https://example.com/some-online-image.jpg", 
+        title: "Obelisk", 
+        preview: "Obelisk/side-white-88-Large.jpeg",        
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
