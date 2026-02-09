@@ -174,3 +174,13 @@ a:hover {
     line-height: 1.6;
     text-align: left; /* Easier to read paragraphs */
 }
+
+.project-detail {
+    display: none;
+    flex-direction: column; /* Ensures title, bio, and images stack */
+    gap: 2rem;
+    padding-bottom: 100px;
+    overflow-y: auto;
+    height: 100vh;
+    padding-top: 100px; /* Add space for the close button */
+}

@@ -116,32 +116,44 @@ projects.forEach(p => {
 
 // --- 3. NAVIGATION ---
 function openProject(id) {
-    // 1. Find the Template in the HTML
-    const template = document.getElementById(`project-${id}-content`); 
-    
-    // If we haven't made the HTML for this project yet, do nothing (or log error)
-    if (!template) {
-        console.error(`No content found for Project ID ${id}.`);
+    // 1. Find the project data from your array
+    const p = projects.find(item => item.id === id);
+    if (!p) {
+        console.error("Project not found:", id);
         return;
     }
 
-    // 2. Clear current view
-    const detailView = document.getElementById('detail-view');
-    detailView.innerHTML = ''; 
+    // 2. Populate Title
+    const titleEl = document.getElementById('detail-title');
+    titleEl.innerText = p.title;
+    titleEl.className = 'drift-text entropy-element'; // Reset classes for physics
+    
+    // 3. Populate Bio
+    const bioEl = document.getElementById('detail-bio');
+    bioEl.innerText = p.bio;
+    bioEl.className = 'bio-text drift-text entropy-element'; // Reset classes
 
-    // 3. Clone the content and inject it
-    const clone = template.content.cloneNode(true);
-    detailView.appendChild(clone);
+    // 4. Populate Images
+    const imgContainer = document.getElementById('detail-images');
+    imgContainer.innerHTML = ''; // Clear old images
+    
+    p.images.forEach(imgSrc => {
+        const img = document.createElement('img');
+        img.src = imgSrc;
+        img.className = 'drift-media entropy-element'; // Add physics classes
+        imgContainer.appendChild(img);
+    });
 
-    // 4. Setup Physics for the New Elements
-    // We look for anything with class "drift-text" or "drift-media" 
-    const newDrifters = detailView.querySelectorAll('.drift-text, .drift-media');
+    // 5. Initialize Physics for these new elements
+    // We select the title, bio, and all new images
+    const newDrifters = [titleEl, bioEl, ...imgContainer.querySelectorAll('img')];
     
     newDrifters.forEach(el => {
-        el.classList.add('entropy-element'); // Turn on the physics engine
-        initPhysics(el); // Give it a starting push
+        // Reset physics state for these specific elements
+        physicsState.delete(el); 
+        initPhysics(el);
         
-        // Tag them so gameLoop knows to restrict text rotation more than images
+        // Tag them so the gameLoop knows how to rotate them
         if (el.classList.contains('drift-text')) {
              el.dataset.type = 'text'; 
         } else {
@@ -149,17 +161,29 @@ function openProject(id) {
         }
     });
 
-    // 5. Switch Screens
+    // 6. Switch Screens
     const listView = document.getElementById('list-view');
+    const detailView = document.getElementById('detail-view');
     const homeBtn = document.getElementById('home-btn');
+    const hoverImg = document.getElementById('hover-reveal');
     
     listView.style.display = 'none';
-    detailView.style.display = 'block'; 
+    detailView.style.display = 'flex'; 
     homeBtn.style.display = 'block';
     
-    // Hide the hover image from the home screen
-    const hoverImg = document.getElementById('hover-reveal');
+    // Hide the hover image
     hoverImg.style.opacity = 0;
+}
+
+function goHome() {
+    const listView = document.getElementById('list-view');
+    const detailView = document.getElementById('detail-view');
+    const homeBtn = document.getElementById('home-btn');
+
+    // Switch visibility
+    listView.style.display = 'flex'; // Or 'block', depending on your CSS preference
+    detailView.style.display = 'none';
+    homeBtn.style.display = 'none';
 }
 
 // --- 4. HOVER IMAGE ---
