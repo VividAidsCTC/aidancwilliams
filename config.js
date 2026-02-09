@@ -10,15 +10,28 @@ const projects = [
         title: "Obelisk", 
         preview: "Obelisk/side-white-88-Large.jpeg",        
         images: [
-            "https://example.com/detail-1.jpg",
-            "https://example.com/detail-2.jpg"
+            
+            "Obelisk/Language-Large.jpeg",
+            "Obelisk/kitchen-3-wide-Large.jpeg",
+            "Obelisk/opening-iris-Large.jpeg",
+            "Obelisk/using-arms-open-Large.jpeg",
+            "Obelisk/cup-with-water-Large.jpeg",
+            "Obelisk/starting-process-Large.jpeg",
+            "Obelisk/woman-using-no-chandelier-Large.jpeg",
+            "Obelisk/three-obelisks.jpeg",
+            "Obelisk/glass-with-tea-Large.jpeg",
+            "Obelisk/side-dim-Large.jpeg",
+            "Obelisk/top-dim-Large.jpeg",
+            "Obelisk/exploded-fixed.png",
+            "Obelisk/charcoal-Large.jpeg",
+
         ],
-        bio: "You can also use online links for images if you don't want to host them yourself."
+        bio: "In so many of our lives, stillness is missing. The weekday morning is a rushed process: throwing on clothes, a quick cup of coffee or tea and out to start one’s day. Obelisk aims to bring back a careful moment of rest. Obelisk is more than a morning routine, it is an innovative use of robotics that brings together the ceremony of tea drinking with meditation. Tea is inherently spiritual, both in substance and pratice. The beverage is consumed by an estimated 2 billion people everyday in countless ceremonies. As the revered Buddhist monk Popchong Sunim puts it, “Tea is a path to the universe.” Obelisks too are paths to the universe; totems, spires and obelisks were built through millennia by disparate cultures, often with the intent of asking for or offering something. Egyptian, American Indian and Aztec culture, all constructed these objects to bring them closer with their deities. Throughout the design process, I held the great minimalists in mind. The goal was to create a device that doesn’t demand attention, in size or form, that fits perfectly into the user’s space. Below are some of my design references"
     },
 
     {
         id: 1,
-        title: "Second PROJECT", 
+        title: "Graph", 
         preview: "https://example.com/some-online-image.jpg", 
         images: [
             "https://example.com/detail-1.jpg",
@@ -29,7 +42,7 @@ const projects = [
 
     {
         id: 2,
-        title: "THIRD PROJECT", 
+        title: "Semiotics and Understanding", 
         preview: "https://example.com/some-online-image.jpg", 
         images: [
             "https://example.com/detail-1.jpg",
@@ -40,7 +53,7 @@ const projects = [
 
     {
         id: 3,
-        title: "Fourth PROJECT", 
+        title: "Content Exoskeleton", 
         preview: "https://example.com/some-online-image.jpg", 
         images: [
             "https://example.com/detail-1.jpg",
@@ -51,7 +64,18 @@ const projects = [
 
     {
         id: 4,
-        title: "Fifth PROJECT", 
+        title: "Camper Magazine", 
+        preview: "https://example.com/some-online-image.jpg", 
+        images: [
+            "https://example.com/detail-1.jpg",
+            "https://example.com/detail-2.jpg"
+        ],
+        bio: "You can also use online links for images if you don't want to host them yourself."
+    },
+
+        {
+        id: 5,
+        title: "Scorched Wine Rack", 
         preview: "https://example.com/some-online-image.jpg", 
         images: [
             "https://example.com/detail-1.jpg",
@@ -59,7 +83,6 @@ const projects = [
         ],
         bio: "You can also use online links for images if you don't want to host them yourself."
     }
-
     
 ];
 
