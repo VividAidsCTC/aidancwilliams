@@ -3,89 +3,40 @@ const MAX_TIME_MINUTES = 10;
 const START_TIME = Date.now();
 const WILD_EVENT_INTERVAL = 45000; 
 
-// --- Projects Page
+// --- PROJECTS MENU ---
+// Since the content is now in HTML templates, we only need 
+// the Title (for the link) and Preview (for the hover image) here.
 const projects = [
     {
         id: 0,
         title: "Obelisk", 
-        preview: "Obelisk/side-white-88-Large.jpeg",        
-        images: [
-            
-            "Obelisk/Language-Large.jpeg",
-            "Obelisk/kitchen-3-wide-Large.jpeg",
-            "Obelisk/opening-iris-Large.jpeg",
-            "Obelisk/using-arms-open-Large.jpeg",
-            "Obelisk/IMG_0739.mp4",
-            "Obelisk/cup-with-water-Large.jpeg",
-            "Obelisk/starting-process-Large.jpeg",
-            "Obelisk/woman-using-no-chandelier-Large.jpeg",
-            "Obelisk/ring-10s.mp4",
-            "Obelisk/three-obelisks.jpeg",
-            "Obelisk/glass-with-tea-Large.jpeg",
-            "Obelisk/side-dim-Large.jpeg",
-            "Obelisk/top-dim-Large.jpeg",
-            "Obelisk/exploded-fixed.png",
-            "Obelisk/charcoal-Large.jpeg",
-
-        ],
-        bio: "In so many of our lives, stillness is missing. The weekday morning is a rushed process: throwing on clothes, a quick cup of coffee or tea and out to start one’s day. Obelisk aims to bring back a careful moment of rest. Obelisk is more than a morning routine, it is an innovative use of robotics that brings together the ceremony of tea drinking with meditation. Tea is inherently spiritual, both in substance and pratice. The beverage is consumed by an estimated 2 billion people everyday in countless ceremonies. As the revered Buddhist monk Popchong Sunim puts it, “Tea is a path to the universe.” Obelisks too are paths to the universe; totems, spires and obelisks were built through millennia by disparate cultures, often with the intent of asking for or offering something. Egyptian, American Indian and Aztec culture, all constructed these objects to bring them closer with their deities. Throughout the design process, I held the great minimalists in mind. The goal was to create a device that doesn’t demand attention, in size or form, that fits perfectly into the user’s space. Below are some of my design references."
+        preview: "Obelisk/side-white-88-Large.jpeg"
     },
-
     {
         id: 1,
         title: "Graph", 
-        preview: "https://example.com/some-online-image.jpg", 
-        images: [
-            "https://example.com/detail-1.jpg",
-            "https://example.com/detail-2.jpg"
-        ],
-        bio: "You can also use online links for images if you don't want to host them yourself."
+        preview: "https://example.com/some-online-image.jpg"
     },
-
     {
         id: 2,
         title: "Semiotics and Understanding", 
-        preview: "https://example.com/some-online-image.jpg", 
-        images: [
-            "https://example.com/detail-1.jpg",
-            "https://example.com/detail-2.jpg"
-        ],
-        bio: "You can also use online links for images if you don't want to host them yourself."
+        preview: "https://example.com/some-online-image.jpg"
     },
-
     {
         id: 3,
         title: "Content Exoskeleton", 
-        preview: "https://example.com/some-online-image.jpg", 
-        images: [
-            "https://example.com/detail-1.jpg",
-            "https://example.com/detail-2.jpg"
-        ],
-        bio: "You can also use online links for images if you don't want to host them yourself."
+        preview: "https://example.com/some-online-image.jpg"
     },
-
     {
         id: 4,
         title: "Camper Magazine", 
-        preview: "https://example.com/some-online-image.jpg", 
-        images: [
-            "https://example.com/detail-1.jpg",
-            "https://example.com/detail-2.jpg"
-        ],
-        bio: "You can also use online links for images if you don't want to host them yourself."
+        preview: "https://example.com/some-online-image.jpg"
     },
-
-        {
+    {
         id: 5,
         title: "Scorched Wine Rack", 
-        preview: "https://example.com/some-online-image.jpg", 
-        images: [
-            "https://example.com/detail-1.jpg",
-            "https://example.com/detail-2.jpg"
-        ],
-        bio: "You can also use online links for images if you don't want to host them yourself."
+        preview: "https://example.com/some-online-image.jpg"
     }
-    
 ];
 
 // --- 2. INITIALIZATION ---
@@ -117,15 +68,14 @@ projects.forEach(p => {
 // --- 3. NAVIGATION ---
 function openProject(id) {
     // 1. Find the Template in the HTML
-    const template = document.getElementById(`project-${id-0}-content`); // (id-0 ensures it's a number)
+    const template = document.getElementById(`project-${id}-content`); 
     
     if (!template) {
-        console.error(`No content found for Project ID ${id}. Make sure <template id="project-${id}-content"> exists in HTML.`);
+        console.error(`No content found for Project ID ${id}. Check index.html <template> tags.`);
         return;
     }
 
     // 2. Clear current view
-    // We remove everything currently in the detail view to make room for new stuff
     detailView.innerHTML = ''; 
 
     // 3. Clone the content and inject it
@@ -133,19 +83,15 @@ function openProject(id) {
     detailView.appendChild(clone);
 
     // 4. Setup Physics for the New Elements
-    // We look for anything with class "drift-text" or "drift-media" 
-    // and manually add them to the physics system.
-    
     const newDrifters = detailView.querySelectorAll('.drift-text, .drift-media');
     
     newDrifters.forEach(el => {
-        el.classList.add('entropy-element'); // Turn on the physics engine for this item
+        el.classList.add('entropy-element'); // Turn on the physics engine
         initPhysics(el); // Give it a starting push
         
-        // Fix for Text vs Images constraints
-        // We tag them so the gameLoop knows which constraint to apply (Leash vs Invisible Box)
+        // Tag them so gameLoop knows to restrict text rotation
         if (el.classList.contains('drift-text')) {
-             el.dataset.type = 'text'; // Helper tag
+             el.dataset.type = 'text'; 
         } else {
              el.dataset.type = 'media';
         }
@@ -153,9 +99,11 @@ function openProject(id) {
 
     // 5. Switch Screens
     listView.style.display = 'none';
-    detailView.style.display = 'block'; // Block allows normal scrolling layout if needed
+    detailView.style.display = 'block'; 
     homeBtn.style.display = 'block';
-    hideImg();
+    
+    // Hide the hover image from the home screen
+    hoverImg.style.opacity = 0;
 }
 
 // --- 4. HOVER IMAGE ---
@@ -241,7 +189,6 @@ function triggerDataRot(element) {
 // WILD EVENT TRIGGER
 setInterval(() => {
     // Only target elements that are NOT in the detail view
-    // This prevents the project title/bio from suddenly falling while you are reading them
     const candidates = Array.from(document.querySelectorAll('.title-target:not(.wild)'))
         .filter(el => el.offsetParent !== null && el.closest('#detail-view') === null);
 
@@ -324,7 +271,7 @@ function gameLoop() {
             if (state.rotation > maxRot) { state.rotation = maxRot; state.vr *= -1; }
             if (state.rotation < -maxRot) { state.rotation = -maxRot; state.vr *= -1; }
 
-            } else {
+        } else {
             // --- 3. HOME VIEW: STANDARD DRIFT ---
             const currentSpeed = 0.0005 + (chaos * 0.02); 
             
@@ -354,8 +301,6 @@ function gameLoop() {
         currentRotInterval = Math.max(1000, currentRotInterval - 2500);
     }
     
-    // (Glitch Squares removed per request)
-
     requestAnimationFrame(gameLoop);
 }
 
