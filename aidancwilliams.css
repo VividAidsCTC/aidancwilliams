@@ -153,11 +153,12 @@ a:hover {
 
 /* Ensure the layout holds together */
 .project-layout {
-    width: 100%;
-    max-width: 800px; /* Or whatever width you prefer */
-    margin: 0 auto;
-    text-align: center;
+    width: 100%;       /* Full width */
+    max-width: none;   /* Remove the 800px limit */
+    padding: 0 4vw;    /* Add small gutters so items don't touch the screen edge */
+    box-sizing: border-box;
     padding-top: 10vh;
+    text-align: center;
 }
 
 /* Ensure Drift Items can actually move */
@@ -170,11 +171,9 @@ a:hover {
 
 /* Specific styling for your text */
 .bio-text {
-    max-width: 600px;
-    margin: 0 auto 3rem auto;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    text-align: left; /* Easier to read paragraphs */
+    max-width: 600px;  /* Keep text in a readable column */
+    margin: 0 auto 5rem auto; /* Center it */
+    text-align: left;
 }
 
 .project-detail {
@@ -187,4 +186,12 @@ a:hover {
     padding-top: 100px; /* Add space for the close button */
     padding-left: 100px;
     padding-right: 100px;
+}
+
+.media-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;   /* Allows images to sit side-by-side if they fit */
+    justify-content: center; /* Centers them */
+    gap: 4rem; /* Space between images */
 }
