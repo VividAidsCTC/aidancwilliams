@@ -60,7 +60,7 @@ a:hover {
     padding-top: 100px;    /* Space for the "Close" button */
     padding-bottom: 100px;
     padding-left: 10vw;
-    padding-right: 15vw;
+    padding-right: 25vw;
     box-sizing: border-box;
     display: none;         /* Hidden by default */
     /* No side padding here to avoid "Sidebar Clipping" */

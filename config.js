@@ -286,13 +286,19 @@ function gameLoop() {
             
         } else if (isDetailItem) {
             // --- 2. PROJECT VIEW: CONSTRAINED DRIFT ---
-            
+
             // Check if it is text or media based on the tag we added in openProject
             const isText = el.dataset.type === 'text' || el.id === 'detail-title' || el.id === 'detail-bio';
-            
+
             // CONFIGURATION
             const driftSpeed = 0.00001; 
             const rangeLimit = 30; // Reduce drift range for detail view
+
+            // --- LIMIT DRIFT/ROTATION SPEED ---
+            // Clamp velocities to prevent rocking like a sea ship
+            state.vx = Math.max(Math.min(state.vx, 0.05), -0.05);
+            state.vy = Math.max(Math.min(state.vy, 0.05), -0.05);
+            state.vr = Math.max(Math.min(state.vr, 0.01), -0.01);
 
             // MOVE
             state.x += state.vx * driftSpeed;
@@ -315,7 +321,7 @@ function gameLoop() {
 
             } else {
             // --- 3. HOME VIEW: STANDARD DRIFT ---
-            const currentSpeed = 0.0005 + (chaos * 0.02); 
+            const currentSpeed = 0.00001 + (chaos * 0.02); 
             
             state.x += state.vx * currentSpeed; 
             state.y += state.vy * currentSpeed;
