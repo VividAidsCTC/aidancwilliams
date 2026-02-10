@@ -8,7 +8,7 @@ const projects = [
     {
         id: 0,
         title: "Obelisk", 
-        preview: "Obelisk/side-white-88-Large.jpeg",        
+        preview: "Obelisk/side-white-88.jpeg",        
         images: [
             
             "Obelisk/Language-Large.jpeg",
