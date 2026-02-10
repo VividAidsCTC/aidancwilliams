@@ -152,7 +152,7 @@ let mouseX = 0, mouseY = 0;
 document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-    hoverImg.style.left = mouseX + 'px';
+    hoverImg.style.left = (mouseX - 50) + 'px'; // Offset 30px left
     hoverImg.style.top = mouseY + 'px';
 });
 
@@ -214,7 +214,7 @@ function triggerDataRot(element) {
     if (!originalText) return; 
     
     if (link.rotTimeout) clearTimeout(link.rotTimeout);
-    const numGlitches = Math.floor(Math.random() * 5) + 2;
+    const numGlitches = Math.floor(Math.random() * 3) + 2;
     let chars = originalText.split('');
     
     for(let i=0; i<numGlitches; i++) {
@@ -291,7 +291,7 @@ function gameLoop() {
             const isText = el.dataset.type === 'text' || el.id === 'detail-title' || el.id === 'detail-bio';
             
             // CONFIGURATION
-            const driftSpeed = 0.0001; 
+            const driftSpeed = 0.00001; 
             const rangeLimit = 30; // Reduce drift range for detail view
 
             // MOVE

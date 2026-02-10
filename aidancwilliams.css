@@ -16,7 +16,7 @@ body, html {
     font-family: var(--font-family);
     font-size: var(--font-size);
     overflow-x: hidden; /* Hide scrollbars, but we will bounce off edges */
-    overflow-y: hidden; 
+    overflow-y: scroll; /* Allow vertical scrolling */
 }
 
 a {
@@ -33,61 +33,104 @@ a:hover {
 }
 
 /* --- LAYOUTS --- */
+
+/* 1. THE SHELL (Reset) */
 #app {
-    padding: 40px;
-    max-width: 800px;
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-.project-list {
+/* 2. HOME PAGE (The Menu) - Kept Tight & Centered */
+#list-view {
+    max-width: 800px;      /* Restores the "Menu" width constraint */
+    margin: 15vh auto 0;   /* Centers it vertically (15vh down) and horizontally (auto) */
+    padding-left: 5vw;     /* Adds a little breathing room on the left */
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    margin-top: 100px;
+    position: relative;    /* Context for absolute physics items */
+    min-height: 80vh;      /* Ensure it takes up space even if empty */
 }
 
-.project-item {
-    width: fit-content;
-    user-select: none;
-    /* Important for physics to calculate bounds correctly */
-    display: block; 
-}
-
-/* Wild items need to be on top to be seen bouncing */
-.wild {
-    z-index: 1000;
-    color: blue; /* Optional: Visual cue that it's wild */
-}
-
-.project-detail {
-    display: none;
-    flex-direction: column;
-    gap: 2rem;
+/* 3. PROJECT PAGE (The Canvas) - Full Width */
+#detail-view {
+    width: 100vw;           /* Full screen width */
+    max-width: 100vw;       /* Remove limits */
+    padding-top: 100px;    /* Space for the "Close" button */
     padding-bottom: 100px;
-    overflow-y: auto;
-    height: 100vh;
-    padding-left: 100px;
-    padding-right: 100px;
+    padding-left: 10vw;
+    padding-right: 15vw;
+    box-sizing: border-box;
+    display: none;         /* Hidden by default */
+    /* No side padding here to avoid "Sidebar Clipping" */
 }
 
-.detail-images img {
-    width: 100%;
+/* 4. CONTENT CENTERING (The Anti-Clipping Fix) */
+/* This centers the text so it has room to drift left/right without hitting the edge */
+#detail-view h1,
+.bio-text {
     max-width: 600px;
-    margin-bottom: 20px;
-    filter: grayscale(100%);
-    transition: filter 0.3s;
+    margin: 0 0 3rem 0;   /* Remove auto-centering */
+    padding: 0px;
     display: block;
+    position: relative;
 }
 
+#detail-view h1 {
+    text-align: left;       /* Optional: Centers the title text */
+    margin-bottom: 2rem;
+    font-size: 3rem;          /* Make the title big */
+}
+
+/* 5. MEDIA CONTAINER (Images/Video Layout) */
+.media-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;          /* Allows items to wrap to next line */
+    justify-content: center;  /* Centers images in the middle of screen */
+    gap: 4rem;                /* Space between images */
+    padding: 0 2vw;           /* Slight gutter so images don't touch browser edge */
+    box-sizing: border-box;
+}
+
+/* --- PHYSICS ITEMS --- */
+
+.entropy-element {
+    /* Critical for physics engine to move items */
+    position: relative; 
+    will-change: transform; 
+}
+
+
+/* Drift Classes */
+.drift-text, .drift-media {
+    display: block;
+    margin-bottom: 2rem;
+}
+
+/* --- UI ELEMENTS --- */
+
+/* The Close Button */
 .back-btn {
     position: fixed;
     top: 40px;
-    left: 40px;
-    z-index: 100;
-    border-bottom: 1px solid black;
+    left: 40px;          /* Adjusted to sit nicely in the corner */
+    z-index: 1000;       /* Always on top */
+    background: transparent;
+    border: none;
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    cursor: pointer;
+    mix-blend-mode: exclusion; /* Makes it visible on black or white images */
+    color: white; /* Exclusion mode will invert this to black on white backgrounds */
 }
 
-/* --- THE FLOATING HOVER IMAGE --- */
+.back-btn:hover {
+    text-decoration: underline;
+}
+
+/* The Hover Reveal Image */
 #hover-reveal {
     position: fixed;
     pointer-events: none;
@@ -101,97 +144,27 @@ a:hover {
     filter: grayscale(100%);
 }
 
-/* --- GLITCH SQUARES --- */
-.glitch-square {
-    position: fixed;
-    width: 50px;
-    height: 50px;
-    background: white;
-    z-index: 999;
-    pointer-events: none;
-    mix-blend-mode: exclusion;
-}
-
-/* --- GHOST ECHOES --- */
-.ghost-echo {
-    position: fixed;
-    pointer-events: none; /* Can't click ghosts */
-    z-index: -1;          /* Sit behind everything */
-    opacity: 0.4;
-    filter: blur(1px) grayscale(100%);
-    transition: all 2s ease-out; /* The fade-out duration */
-    color: #999;          /* Slightly lighter text for ghosts */
-}
-
-/* Optional: Make them distort as they vanish */
-.ghost-echo.fading {
-    opacity: 0;
-    transform: scale(1.1) skewX(20deg);
-    filter: blur(8px);
-}
-
-.project-list {
-    position: relative; /* Ensures ghosts spawn relative to the list container */
-}
-
+/* Ghost Echoes (Visual Effect) */
 .ghost-echo {
     position: absolute;
-    pointer-events: none; /* Click-through */
-    z-index: -1;          /* Behind the real text */
-    opacity: 0.6;         /* Start semi-transparent */
-    color: #aaaaaa;       /* Slightly lighter gray */
-    transition: all 5s ease-out; /* The 5-second fade */
+    pointer-events: none; 
+    z-index: -1;          
+    opacity: 0.6;         
+    color: #aaaaaa;       
+    transition: all 5s ease-out; 
     filter: blur(0px);
     mix-blend-mode: multiply;
+    white-space: nowrap;
 }
 
 .ghost-echo.fading {
     opacity: 0;
-    filter: blur(4px);    /* Blur as it vanishes */
-    transform: scale(1.1); /* Subtle expansion */
+    filter: blur(4px);    
+    transform: scale(1.1); 
 }
 
-/* Ensure the layout holds together */
-.project-layout {
-    width: 100%;       /* Full width */
-    max-width: none;   /* Remove the 800px limit */
-    padding: 0 4vw;    /* Add small gutters so items don't touch the screen edge */
-    box-sizing: border-box;
-    padding-top: 10vh;
-    text-align: center;
-}
-
-/* Ensure Drift Items can actually move */
-.drift-text, .drift-media {
-    position: relative; /* Required for physics transform to work */
-    display: block;
-    margin: 0 auto;
-    margin-bottom: 2rem; /* Spacing between items */
-}
-
-/* Specific styling for your text */
-.bio-text {
-    max-width: 600px;  /* Keep text in a readable column */
-    margin: 0 auto 5rem auto; /* Center it */
-    text-align: left;
-}
-
-.project-detail {
-    display: none;
-    flex-direction: column; /* Ensures title, bio, and images stack */
-    gap: 2rem;
-    padding-bottom: 100px;
-    overflow-y: auto;
-    height: 100vh;
-    padding-top: 100px; /* Add space for the close button */
-    padding-left: 100px;
-    padding-right: 100px;
-}
-
-.media-container {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;   /* Allows images to sit side-by-side if they fit */
-    justify-content: center; /* Centers them */
-    gap: 4rem; /* Space between images */
+/* Wild items (Crazy physics) */
+.wild {
+    z-index: 1000;
+    color: blue; /* Visual cue */
 }
