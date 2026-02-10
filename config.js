@@ -116,63 +116,24 @@ projects.forEach(p => {
 
 // --- 3. NAVIGATION ---
 function openProject(id) {
-    // 1. Find the project data from your array
-    const p = projects.find(item => item.id === id);
-    if (!p) {
-        console.error("Project not found:", id);
-        return;
-    }
+    // Hide all project detail sections
+    document.querySelectorAll('#detail-view > section').forEach(sec => sec.style.display = 'none');
 
-    // 2. Populate Title
-    const titleEl = document.getElementById('detail-title');
-    titleEl.innerText = p.title;
-    titleEl.className = 'drift-text entropy-element'; // Reset classes for physics
-    
-    // 3. Populate Bio
-    const bioEl = document.getElementById('detail-bio');
-    bioEl.innerText = p.bio;
-    bioEl.className = 'bio-text drift-text entropy-element'; // Reset classes
+    // Show the selected project detail section
+    const section = document.getElementById(`project-detail-${id}`);
+    if (section) section.style.display = 'block';
 
-    // 4. Populate Images
-    const imgContainer = document.getElementById('detail-images');
-    imgContainer.innerHTML = ''; // Clear old images
-    
-    p.images.forEach(imgSrc => {
-        const img = document.createElement('img');
-        img.src = imgSrc;
-        img.className = 'drift-media entropy-element'; // Add physics classes
-        imgContainer.appendChild(img);
-    });
-
-    // 5. Initialize Physics for these new elements
-    // We select the title, bio, and all new images
-    const newDrifters = [titleEl, bioEl, ...imgContainer.querySelectorAll('img')];
-    
-    newDrifters.forEach(el => {
-        // Reset physics state for these specific elements
-        physicsState.delete(el); 
-        initPhysics(el);
-        
-        // Tag them so the gameLoop knows how to rotate them
-        if (el.classList.contains('drift-text')) {
-             el.dataset.type = 'text'; 
-        } else {
-             el.dataset.type = 'media';
-        }
-    });
-
-    // 6. Switch Screens
-    const listView = document.getElementById('list-view');
-    const detailView = document.getElementById('detail-view');
-    const homeBtn = document.getElementById('home-btn');
-    const hoverImg = document.getElementById('hover-reveal');
-    
+    // Show detail view, hide list view
     listView.style.display = 'none';
-    detailView.style.display = 'flex'; 
+    detailView.style.display = 'flex';
     homeBtn.style.display = 'block';
-    
-    // Hide the hover image
     hoverImg.style.opacity = 0;
+
+    // Optionally: re-init physics for new elements
+    section.querySelectorAll('.drift-text, .drift-media, img, h1, p').forEach(el => {
+        physicsState.delete(el);
+        initPhysics(el);
+    });
 }
 
 function goHome() {
@@ -330,8 +291,8 @@ function gameLoop() {
             const isText = el.dataset.type === 'text' || el.id === 'detail-title' || el.id === 'detail-bio';
             
             // CONFIGURATION
-            const driftSpeed = 0.02; 
-            const rangeLimit = 50;  
+            const driftSpeed = 0.0001; 
+            const rangeLimit = 30; // Reduce drift range for detail view
 
             // MOVE
             state.x += state.vx * driftSpeed;

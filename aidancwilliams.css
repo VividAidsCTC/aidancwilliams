@@ -66,6 +66,8 @@ a:hover {
     padding-bottom: 100px;
     overflow-y: auto;
     height: 100vh;
+    padding-left: 100px;
+    padding-right: 100px;
 }
 
 .detail-images img {
@@ -183,4 +185,6 @@ a:hover {
     overflow-y: auto;
     height: 100vh;
     padding-top: 100px; /* Add space for the close button */
+    padding-left: 100px;
+    padding-right: 100px;
 }
