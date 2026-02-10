@@ -34,7 +34,7 @@ const projects = [
     {
         id: 1,
         title: "Graph", 
-        preview: "https://example.com/some-online-image.jpg", 
+        preview: "Graph/png_shadow.png", 
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
@@ -45,7 +45,7 @@ const projects = [
     {
         id: 2,
         title: "Semiotics and Understanding", 
-        preview: "https://example.com/some-online-image.jpg", 
+        preview: "Chair/chair_png_black.png", 
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
@@ -56,7 +56,7 @@ const projects = [
     {
         id: 3,
         title: "Content Exoskeleton", 
-        preview: "https://example.com/some-online-image.jpg", 
+        preview: "Exo Skeleton/exo_png.png", 
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
@@ -67,7 +67,7 @@ const projects = [
     {
         id: 4,
         title: "Camper Magazine", 
-        preview: "https://example.com/some-online-image.jpg", 
+        preview: "Magazine/camper.png", 
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
@@ -78,7 +78,7 @@ const projects = [
         {
         id: 5,
         title: "Scorched Wine Rack", 
-        preview: "https://example.com/some-online-image.jpg", 
+        preview: "Wine Rack/winerack.png", 
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
@@ -152,7 +152,7 @@ let mouseX = 0, mouseY = 0;
 document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-    hoverImg.style.left = (mouseX - 50) + 'px'; // Offset 30px left
+    hoverImg.style.left = (mouseX - 100) + 'px'; // Offset 100px left
     hoverImg.style.top = mouseY + 'px';
 });
 
