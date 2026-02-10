@@ -34,7 +34,7 @@ const projects = [
     {
         id: 1,
         title: "Graph", 
-        preview: "Graph/png_shadow.jpeg", 
+        preview: "Graph/png_shadow.jpg", 
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
