@@ -19,7 +19,7 @@ const projects = [
             "Obelisk/cup-with-water-Large.jpeg",
             "Obelisk/starting-process-Large.jpeg",
             "Obelisk/woman-using-no-chandelier-Large.jpeg",
-            "Obelisk/ring-10s.mp4",
+            "Obelisk/riag-10s.mp4",
             "Obelisk/three-obelisks.jpeg",
             "Obelisk/glass-with-tea-Large.jpeg",
             "Obelisk/side-dim-Large.jpeg",
@@ -34,7 +34,7 @@ const projects = [
     {
         id: 1,
         title: "Graph", 
-        preview: "Graph/png_shadow.png", 
+        preview: "Graph/png_shadow.jpeg", 
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
@@ -128,6 +128,8 @@ function openProject(id) {
     detailView.style.display = 'flex';
     homeBtn.style.display = 'block';
     hoverImg.style.opacity = 0;
+
+    detailViewOpenedAt = Date.now(); // Add this line
 
     // Optionally: re-init physics for new elements
     section.querySelectorAll('.drift-text, .drift-media, img, h1, p').forEach(el => {
@@ -286,40 +288,42 @@ function gameLoop() {
             
         } else if (isDetailItem) {
             // --- 2. PROJECT VIEW: CONSTRAINED DRIFT ---
+            // Only allow entropy after 10 seconds
+            if (Date.now() - detailViewOpenedAt > 10000) {
+                // Check if it is text or media based on the tag we added in openProject
+                const isText = el.dataset.type === 'text' || el.id === 'detail-title' || el.id === 'detail-bio';
 
-            // Check if it is text or media based on the tag we added in openProject
-            const isText = el.dataset.type === 'text' || el.id === 'detail-title' || el.id === 'detail-bio';
+                // CONFIGURATION
+                const driftSpeed = 0.00001; 
+                const rangeLimit = 30; // Reduce drift range for detail view
 
-            // CONFIGURATION
-            const driftSpeed = 0.00001; 
-            const rangeLimit = 30; // Reduce drift range for detail view
+                // --- LIMIT DRIFT/ROTATION SPEED ---
+                // Clamp velocities to prevent rocking like a sea ship
+                state.vx = Math.max(Math.min(state.vx, 0.05), -0.05);
+                state.vy = Math.max(Math.min(state.vy, 0.05), -0.05);
+                state.vr = Math.max(Math.min(state.vr, 0.01), -0.01);
 
-            // --- LIMIT DRIFT/ROTATION SPEED ---
-            // Clamp velocities to prevent rocking like a sea ship
-            state.vx = Math.max(Math.min(state.vx, 0.05), -0.05);
-            state.vy = Math.max(Math.min(state.vy, 0.05), -0.05);
-            state.vr = Math.max(Math.min(state.vr, 0.01), -0.01);
+                // MOVE
+                state.x += state.vx * driftSpeed;
+                state.y += state.vy * driftSpeed;
 
-            // MOVE
-            state.x += state.vx * driftSpeed;
-            state.y += state.vy * driftSpeed;
+                // INVISIBLE BOX (Bounce)
+                if (state.x > rangeLimit) { state.x = rangeLimit; state.vx = -Math.abs(state.vx); }
+                if (state.x < -rangeLimit) { state.x = -rangeLimit; state.vx = Math.abs(state.vx); }
+                
+                if (state.y > rangeLimit) { state.y = rangeLimit; state.vy = -Math.abs(state.vy); }
+                if (state.y < -rangeLimit) { state.y = -rangeLimit; state.vy = Math.abs(state.vy); }
 
-            // INVISIBLE BOX (Bounce)
-            if (state.x > rangeLimit) { state.x = rangeLimit; state.vx = -Math.abs(state.vx); }
-            if (state.x < -rangeLimit) { state.x = -rangeLimit; state.vx = Math.abs(state.vx); }
-            
-            if (state.y > rangeLimit) { state.y = rangeLimit; state.vy = -Math.abs(state.vy); }
-            if (state.y < -rangeLimit) { state.y = -rangeLimit; state.vy = Math.abs(state.vy); }
+                // ROTATION
+                // Text rotates LESS (easier to read), Media rotates MORE (cooler)
+                const maxRot = isText ? 1 : 2; 
 
-            // ROTATION
-            // Text rotates LESS (easier to read), Media rotates MORE (cooler)
-            const maxRot = isText ? 1 : 2; 
+                state.rotation += state.vr * chaos;
+                if (state.rotation > maxRot) { state.rotation = maxRot; state.vr *= -1; }
+                if (state.rotation < -maxRot) { state.rotation = -maxRot; state.vr *= -1; }
 
-            state.rotation += state.vr * chaos;
-            if (state.rotation > maxRot) { state.rotation = maxRot; state.vr *= -1; }
-            if (state.rotation < -maxRot) { state.rotation = -maxRot; state.vr *= -1; }
-
-            } else {
+            }
+        } else {
             // --- 3. HOME VIEW: STANDARD DRIFT ---
             const currentSpeed = 0.00001 + (chaos * 0.02); 
             
@@ -355,3 +359,5 @@ function gameLoop() {
 }
 
 requestAnimationFrame(gameLoop);
+
+let detailViewOpenedAt = 0;
