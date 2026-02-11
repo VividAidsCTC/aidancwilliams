@@ -168,3 +168,34 @@ a:hover {
     z-index: 1000;
     color: blue; /* Visual cue */
 }
+
+.project-content {
+    width: 40vw;
+    max-width: 700px;
+    min-width: 280px;
+    margin: 0 auto 2rem auto;
+}
+
+.project-content h1,
+.project-content p {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.yt-embed {
+    width: 100%;
+    aspect-ratio: 16/9;
+    max-width: 100%;
+    border: none;
+    display: block;
+    margin: 2rem 0;
+}
+
+/* Responsive for mobile */
+@media (max-width: 700px) {
+    .project-content {
+        width: 90vw;
+        min-width: unset;
+        max-width: 98vw;
+    }
+}
