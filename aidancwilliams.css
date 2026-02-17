@@ -94,6 +94,33 @@ a:hover {
     box-sizing: border-box;
 }
 
+/* Grid layout for media */
+.media-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 2vw;
+    width: 100%;
+    max-width: 60vw;
+    margin: 2rem 0 0 0; /* Remove auto-centering, add top margin only */
+}
+
+.media-grid img,
+.media-grid video,
+.media-grid iframe {
+    width: 100%;
+    height: auto;         /* Maintain natural aspect ratio */
+    object-fit: contain;  /* Show full image/video, no cropping */
+    display: block;
+    border-radius: 8px;
+    background: #eee;     /* Optional: background for letterboxing */
+}
+
+/* Make single media item span both columns */
+.media-grid:has(> :only-child) {
+    grid-template-columns: 1fr;
+}
+
 /* --- PHYSICS ITEMS --- */
 
 .entropy-element {
@@ -169,17 +196,17 @@ a:hover {
     color: blue; /* Visual cue */
 }
 
-.project-content {
-    width: 40vw;
-    max-width: 700px;
-    min-width: 280px;
+.project-block {
+    max-width: 50vw;
     margin: 0 auto 2rem auto;
+    /* Optionally add padding if you want a gutter from the edge of the screen */
 }
 
-.project-content h1,
-.project-content p {
-    width: 100%;
-    box-sizing: border-box;
+.project-content {
+    width: 40vw;
+    max-width: none;
+    margin: 0 0 2rem 0; /* Remove auto-centering */
+    padding: 0;
 }
 
 .yt-embed {
