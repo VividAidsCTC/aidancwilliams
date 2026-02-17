@@ -34,7 +34,7 @@ const projects = [
     {
         id: 1,
         title: "Graph", 
-        preview: "Graph/png_shadow.jpg", 
+        preview: "Graph/shadow.jpg", 
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
@@ -45,7 +45,7 @@ const projects = [
     {
         id: 2,
         title: "Semiotics and Understanding", 
-        preview: "Chair/chair_png_black.png", 
+        preview: "Chair/chair_black.jpg", 
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
@@ -56,7 +56,7 @@ const projects = [
     {
         id: 3,
         title: "Content Exoskeleton", 
-        preview: "Exo Skeleton/exo_png.png", 
+        preview: "Exo Skeleton/exo.jpg", 
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
@@ -67,7 +67,7 @@ const projects = [
     {
         id: 4,
         title: "Camper Magazine", 
-        preview: "Magazine/camper.png", 
+        preview: "Magazine/camper.jpg", 
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
@@ -78,7 +78,7 @@ const projects = [
         {
         id: 5,
         title: "Scorched Wine Rack", 
-        preview: "Wine Rack/winerack.png", 
+        preview: "Wine Rack/winerack.jpg", 
         images: [
             "https://example.com/detail-1.jpg",
             "https://example.com/detail-2.jpg"
