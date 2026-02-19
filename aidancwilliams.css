@@ -197,7 +197,7 @@ a:hover {
 }
 
 .project-block {
-    max-width: 50vw;
+    max-width: 0vw;
     margin: 0 auto 2rem auto;
     /* Optionally add padding if you want a gutter from the edge of the screen */
 }
