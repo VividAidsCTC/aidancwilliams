@@ -129,7 +129,9 @@ function openProject(id) {
     homeBtn.style.display = 'block';
     hoverImg.style.opacity = 0;
 
-    detailViewOpenedAt = Date.now(); // Add this line
+    detailViewOpenedAt = Date.now();
+    detailDataRotStarted = false;
+    detailDataRotStartTime = Date.now();
 
     // Optionally: re-init physics for new elements
     section.querySelectorAll('.drift-text, .drift-media, img, h1, p').forEach(el => {
@@ -209,25 +211,87 @@ const GLITCH_CHARS = 'XV0#/_<>[]{}—=+*^?@!&';
 let currentRotInterval = 15000; 
 let nextRotTime = Date.now() + currentRotInterval; 
 
-function triggerDataRot(element) {
-    const link = element.querySelector('a');
-    if (!link) return;
-    const originalText = link.dataset.originalText;
-    if (!originalText) return; 
+// --- Data Rot Timers ---
+let lastBodyRot = 0;
+let lastTitleRot = 0;
+const bodyRotInterval = 10000;   // every 10 seconds
+const titleRotInterval = 20000; // every 20 seconds
+const rotDuration = 4000;       // rot lasts 4 seconds
+
+function triggerDataRot(element, minGlitch = 3, maxGlitch = 7) {
+    if (!element) return;
     
-    if (link.rotTimeout) clearTimeout(link.rotTimeout);
-    const numGlitches = Math.floor(Math.random() * 3) + 2;
-    let chars = originalText.split('');
-    
-    for(let i=0; i<numGlitches; i++) {
-        const index = Math.floor(Math.random() * chars.length);
-        chars[index] = GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+    // 1. Save the pristine HTML (not innerText) so we can restore it perfectly
+    if (!element.dataset.originalHtml) {
+        element.dataset.originalHtml = element.innerHTML;
     }
     
-    link.innerText = chars.join('');
-    const duration = 3000 + Math.random() * 12000;
-    link.rotTimeout = setTimeout(() => { link.innerText = originalText; }, duration);
+    const GLITCH_CHARS = 'XV0#/_<>[]{}—=+*^?@!&';
+    const numGlitches = Math.floor(Math.random() * (maxGlitch - minGlitch + 1)) + minGlitch;
+    
+    // 2. Use a TreeWalker to safely find pure text nodes, ignoring HTML tags like <b> and <br>
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+    let textNodes = [];
+    let node;
+    while (node = walker.nextNode()) {
+        // Only grab nodes that actually have text inside them
+        if (node.nodeValue.trim().length > 0) {
+            textNodes.push(node);
+        }
+    }
+    
+    // If there is no text to glitch, stop here
+    if (textNodes.length === 0) return;
+
+    // 3. Apply the glitches randomly ONLY across the safe text nodes
+    for (let i = 0; i < numGlitches; i++) {
+        const randomNode = textNodes[Math.floor(Math.random() * textNodes.length)];
+        let chars = randomNode.nodeValue.split('');
+        const index = Math.floor(Math.random() * chars.length);
+        
+        chars[index] = GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+        randomNode.nodeValue = chars.join('');
+    }
+
+    // 4. Restore the perfect, original HTML after the duration ends
+    setTimeout(() => {
+        element.innerHTML = element.dataset.originalHtml;
+    }, rotDuration);
 }
+
+// --- In your main loop or a setInterval ---
+function dataRotLoop() {
+    const now = Date.now();
+    const detailView = document.getElementById('detail-view');
+    if (!detailView || detailView.style.display === 'none') return;
+
+    // Body text (p.drift-text)
+    if (now - lastBodyRot > bodyRotInterval) {
+        const bodyTexts = Array.from(detailView.querySelectorAll('p.drift-text'))
+            .filter(el => el.offsetParent !== null); // <-- ADD THIS LINE
+
+        if (bodyTexts.length > 0) {
+            const victim = bodyTexts[Math.floor(Math.random() * bodyTexts.length)];
+            triggerDataRot(victim, 2, 12);
+        }
+        lastBodyRot = now;
+    }
+
+    // Title (h1.drift-text)
+    if (now - lastTitleRot > titleRotInterval) {
+        const titles = Array.from(detailView.querySelectorAll('h1.drift-text'))
+            .filter(el => el.offsetParent !== null); // <-- ADD THIS LINE
+
+        if (titles.length > 0) {
+            const victim = titles[Math.floor(Math.random() * titles.length)];
+            triggerDataRot(victim, 2, 4); 
+        }
+        lastTitleRot = now;
+    }
+}
+
+// Call this loop with setInterval
+setInterval(dataRotLoop, 1000);
 
 // WILD EVENT TRIGGER
 setInterval(() => {
@@ -286,43 +350,35 @@ function gameLoop() {
             if (rect.top <= 0) { state.y += (0 - rect.top); state.vy = Math.abs(state.vy) * 0.9; } 
             else if (rect.bottom >= winH) { state.y -= (rect.bottom - winH); state.vy = -Math.abs(state.vy) * 0.8; }
             
-        } else if (isDetailItem) {
-            // --- 2. PROJECT VIEW: CONSTRAINED DRIFT ---
-            // Only allow entropy after 10 seconds
-            if (Date.now() - detailViewOpenedAt > 10000) {
-                // Check if it is text or media based on the tag we added in openProject
-                const isText = el.dataset.type === 'text' || el.id === 'detail-title' || el.id === 'detail-bio';
+       } else if (isDetailItem) {
+            // --- PROJECT VIEW: FREE-FLOWING ENTROPY WITH PARALLAX ---
+            const timeSinceOpen = detailViewOpenedAt ? (Date.now() - detailViewOpenedAt) : 0;
+            
+            if (timeSinceOpen > 5000) { 
+                // At 10s, it's 0. At 12.5s, it's 0.5. At 15s+, it caps at 1.0.
+                const fadeMultiplier = Math.min((timeSinceOpen - 5000) / 2500, 1.0);
 
-                // CONFIGURATION
-                const driftSpeed = 0.00001; 
-                const rangeLimit = 30; // Reduce drift range for detail view
-
-                // --- LIMIT DRIFT/ROTATION SPEED ---
-                // Clamp velocities to prevent rocking like a sea ship
-                state.vx = Math.max(Math.min(state.vx, 0.05), -0.05);
-                state.vy = Math.max(Math.min(state.vy, 0.05), -0.05);
-                state.vr = Math.max(Math.min(state.vr, 0.01), -0.01);
-
-                // MOVE
+                const isText = el.classList.contains('drift-text');
+                
+                // Multiply your base speed by the fader
+                // Note: If the final speed is still too fast, lower the 0.001 and 0.0025
+                const driftSpeed = (isText ? 0.001 : 0.005) * fadeMultiplier;
+                
+                // Movement
                 state.x += state.vx * driftSpeed;
                 state.y += state.vy * driftSpeed;
 
-                // INVISIBLE BOX (Bounce)
-                if (state.x > rangeLimit) { state.x = rangeLimit; state.vx = -Math.abs(state.vx); }
-                if (state.x < -rangeLimit) { state.x = -rangeLimit; state.vx = Math.abs(state.vx); }
+                // --- Rotation ---
+                // NEW: Allow a much wider, natural tilt (5 degrees for text, 10 for images)
+                const maxRot = isText ? 5 : 10;
                 
-                if (state.y > rangeLimit) { state.y = rangeLimit; state.vy = -Math.abs(state.vy); }
-                if (state.y < -rangeLimit) { state.y = -rangeLimit; state.vy = Math.abs(state.vy); }
-
-                // ROTATION
-                // Text rotates LESS (easier to read), Media rotates MORE (cooler)
-                const maxRot = isText ? 1 : 2; 
-
-                state.rotation += state.vr * chaos;
+                // NEW: Dropped the rotation multiplier down to 0.01 so the tilt is incredibly gradual
+                state.rotation += (state.vr * 0.01) * fadeMultiplier;
+                
                 if (state.rotation > maxRot) { state.rotation = maxRot; state.vr *= -1; }
                 if (state.rotation < -maxRot) { state.rotation = -maxRot; state.vr *= -1; }
-
             }
+
         } else {
             // --- 3. HOME VIEW: STANDARD DRIFT ---
             const currentSpeed = 0.00001 + (chaos * 0.02); 
@@ -352,7 +408,7 @@ function gameLoop() {
         nextRotTime = now + currentRotInterval;
         currentRotInterval = Math.max(1000, currentRotInterval - 2500);
     }
-    
+
     // (Glitch Squares removed per request)
 
     requestAnimationFrame(gameLoop);
@@ -361,3 +417,8 @@ function gameLoop() {
 requestAnimationFrame(gameLoop);
 
 let detailViewOpenedAt = 0;
+
+let detailDataRotStarted = false;
+let detailDataRotStartTime = 0;
+let detailDataRotInterval = 10000; // 10 seconds
+let detailDataRotDuration = 3000;  // 3 seconds

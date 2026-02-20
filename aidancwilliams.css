@@ -124,16 +124,19 @@ a:hover {
 /* --- PHYSICS ITEMS --- */
 
 .entropy-element {
-    /* Critical for physics engine to move items */
-    position: relative; 
-    will-change: transform; 
+    position: relative; /* Keeps layout intact */
+    will-change: transform;
+    z-index: 1; /* Images default */
 }
-
 
 /* Drift Classes */
 .drift-text, .drift-media {
     display: block;
     margin-bottom: 2rem;
+}
+
+.drift-text {
+    z-index: 2; /* Text always above images */
 }
 
 /* --- UI ELEMENTS --- */
