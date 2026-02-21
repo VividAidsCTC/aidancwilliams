@@ -409,6 +409,17 @@ function gameLoop() {
         currentRotInterval = Math.max(1000, currentRotInterval - 2500);
     }
 
+    function preloadHoverImages() {
+    projects.forEach(p => {
+        if (p.preview) {
+            const img = new Image();
+            img.src = p.preview;
+            }
+        });
+    }
+    
+window.addEventListener('load', preloadHoverImages);
+
     // (Glitch Squares removed per request)
 
     requestAnimationFrame(gameLoop);
