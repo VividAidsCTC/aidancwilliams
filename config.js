@@ -108,7 +108,7 @@ projects.forEach(p => {
     
     a.onmouseover = () => showImg(p.preview);
     a.onmouseout = () => hideImg();
-    a.onclick = () => openProject(p.id);
+    a.onmousedown = () => openProject(p.id);
 
     el.appendChild(a);
     listView.appendChild(el);
@@ -146,7 +146,7 @@ function goHome() {
     const homeBtn = document.getElementById('home-btn');
 
     // Switch visibility
-    listView.style.display = 'flex'; // Or 'block', depending on your CSS preference
+    listView.style.display = 'block'; // Or 'block', depending on your CSS preference
     detailView.style.display = 'none';
     homeBtn.style.display = 'none';
 }
@@ -362,7 +362,7 @@ function gameLoop() {
                 
                 // Multiply your base speed by the fader
                 // Note: If the final speed is still too fast, lower the 0.001 and 0.0025
-                const driftSpeed = (isText ? 0.001 : 0.005) * fadeMultiplier;
+                const driftSpeed = Math.min((isText ? 0.001 : 0.005) * fadeMultiplier, 0.02); // 0.02 is the cap
                 
                 // Movement
                 state.x += state.vx * driftSpeed;
