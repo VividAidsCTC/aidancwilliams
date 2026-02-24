@@ -144,7 +144,6 @@ a:hover {
 
 .entropy-element {
     position: relative; /* Keeps layout intact */
-    will-change: transform;
     z-index: 1; /* Images default */
 }
 

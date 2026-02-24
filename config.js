@@ -102,14 +102,19 @@ projects.forEach(p => {
     el.id = `proj-item-${p.id}`;
 
     const a = document.createElement('a');
-    a.href = "#";
     a.innerText = p.title;
     a.dataset.originalText = p.title; 
     
+    // Hover events for the preview image
     a.onmouseover = () => showImg(p.preview);
     a.onmouseout = () => hideImg();
-    a.onmousedown = () => openProject(p.id);
 
+    // The bulletproof click fix
+    a.addEventListener('pointerdown', (e) => {
+        e.preventDefault(); 
+        openProject(p.id);
+    });
+    
     el.appendChild(a);
     listView.appendChild(el);
 });
