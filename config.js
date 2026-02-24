@@ -105,15 +105,10 @@ projects.forEach(p => {
     a.innerText = p.title;
     a.dataset.originalText = p.title; 
     
-    // Hover events for the preview image
-    a.onmouseover = () => showImg(p.preview);
-    a.onmouseout = () => hideImg();
-
-    // The bulletproof click fix
-    a.addEventListener('pointerdown', (e) => {
-        e.preventDefault(); 
-        openProject(p.id);
-    });
+    // Attach events as inline attributes so they survive the innerHTML reset
+    a.setAttribute('onmouseover', `showImg('${p.preview}')`);
+    a.setAttribute('onmouseout', `hideImg()`);
+    a.setAttribute('onpointerdown', `event.preventDefault(); openProject(${p.id})`);
     
     el.appendChild(a);
     listView.appendChild(el);
