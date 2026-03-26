@@ -248,4 +248,23 @@ a:hover {
     }
 }
 
+#nav-right {
+    position: fixed;
+    top: 40px;
+    right: 40px;
+    z-index: 1000;
+    display: flex;
+    gap: 20px;
+}
 
+.nav-link {
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    color: var(--text-color);
+    text-decoration: none;
+    mix-blend-mode: exclusion;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
