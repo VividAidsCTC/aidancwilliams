@@ -34,58 +34,38 @@ const projects = [
     {
         id: 1,
         title: "Graph", 
-        preview: "Graph/shadow.jpg", 
-        images: [
-            "https://example.com/detail-1.jpg",
-            "https://example.com/detail-2.jpg"
-        ],
-        bio: "You can also use online links for images if you don't want to host them yourself."
+        preview: "Graph/shadow.jpg"
     },
 
     {
         id: 2,
         title: "Semiotics and Understanding", 
-        preview: "Chair/chair_black.jpg", 
-        images: [
-            "https://example.com/detail-1.jpg",
-            "https://example.com/detail-2.jpg"
-        ],
-        bio: "You can also use online links for images if you don't want to host them yourself."
+        preview: "Chair/chair_black.jpg"
     },
 
     {
         id: 3,
         title: "Content Exoskeleton", 
-        preview: "Exo Skeleton/exo.jpg", 
-        images: [
-            "https://example.com/detail-1.jpg",
-            "https://example.com/detail-2.jpg"
-        ],
-        bio: "You can also use online links for images if you don't want to host them yourself."
+        preview: "Exo Skeleton/exo.jpg"  
     },
 
     {
         id: 4,
         title: "Camper Magazine", 
-        preview: "Magazine/camper.jpg", 
-        images: [
-            "https://example.com/detail-1.jpg",
-            "https://example.com/detail-2.jpg"
-        ],
-        bio: "You can also use online links for images if you don't want to host them yourself."
+        preview: "Magazine/camper.jpg"
     },
 
         {
         id: 5,
         title: "Scorched Wine Rack", 
-        preview: "Wine Rack/winerack.jpg", 
-        images: [
-            "https://example.com/detail-1.jpg",
-            "https://example.com/detail-2.jpg"
-        ],
-        bio: "You can also use online links for images if you don't want to host them yourself."
+        preview: "Wine Rack/winerack.jpg"
+    },
+
+    {
+        id: 6,
+        title: "Fendi Capsule Submission", 
+        preview: "fendi/table.png"
     }
-    
 ];
 
 // --- 2. INITIALIZATION ---
