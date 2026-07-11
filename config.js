@@ -5,30 +5,11 @@ const WILD_EVENT_INTERVAL = 45000;
 
 // --- Projects Page
 const projects = [
+
     {
         id: 0,
-        title: "Obelisk", 
-        preview: "Obelisk/side-white-88.jpg",        
-        images: [
-            
-            "Obelisk/Language-Large.jpeg",
-            "Obelisk/kitchen-3-wide-Large.jpeg",
-            "Obelisk/opening-iris-Large.jpeg",
-            "Obelisk/using-arms-open-Large.jpeg",
-            "Obelisk/IMG_0739.mp4",
-            "Obelisk/cup-with-water-Large.jpeg",
-            "Obelisk/starting-process-Large.jpeg",
-            "Obelisk/woman-using-no-chandelier-Large.jpeg",
-            "Obelisk/riag-10s.mp4",
-            "Obelisk/three-obelisks.jpeg",
-            "Obelisk/glass-with-tea-Large.jpeg",
-            "Obelisk/side-dim-Large.jpeg",
-            "Obelisk/top-dim-Large.jpeg",
-            "Obelisk/exploded-fixed.png",
-            "Obelisk/charcoal-Large.jpeg",
-
-        ],
-        bio: "In so many of our lives, stillness is missing. The weekday morning is a rushed process: throwing on clothes, a quick cup of coffee or tea and out to start one’s day. Obelisk aims to bring back a careful moment of rest. Obelisk is more than a morning routine, it is an innovative use of robotics that brings together the ceremony of tea drinking with meditation. Tea is inherently spiritual, both in substance and pratice. The beverage is consumed by an estimated 2 billion people everyday in countless ceremonies. As the revered Buddhist monk Popchong Sunim puts it, “Tea is a path to the universe.” Obelisks too are paths to the universe; totems, spires and obelisks were built through millennia by disparate cultures, often with the intent of asking for or offering something. Egyptian, American Indian and Aztec culture, all constructed these objects to bring them closer with their deities. Throughout the design process, I held the great minimalists in mind. The goal was to create a device that doesn’t demand attention, in size or form, that fits perfectly into the user’s space. Below are some of my design references."
+        title: "Lamp", 
+        preview: "Lamp/lamp_black.png"
     },
 
     {
@@ -39,30 +20,42 @@ const projects = [
 
     {
         id: 2,
-        title: "Semiotics and Understanding", 
-        preview: "Chair/chair_black.jpg"
+        title: "Buck", 
+        preview: "Buck/buck_black.png"
     },
 
     {
         id: 3,
-        title: "Content Exoskeleton", 
-        preview: "Exo Skeleton/exo.jpg"  
+        title: "Obelisk", 
+        preview: "Obelisk/side-white-88.jpg",        
     },
 
     {
         id: 4,
-        title: "Camper Magazine", 
-        preview: "Magazine/camper.jpg"
+        title: "Semiotics and Understanding", 
+        preview: "Chair/chair_black.jpg"
     },
 
         {
         id: 5,
+         title: "Content Exoskeleton", 
+        preview: "Exo Skeleton/exo.jpg"  
+    },
+
+    {
+        id: 6,
+        title: "Camper Magazine", 
+        preview: "Magazine/camper.jpg"
+    },
+
+    {
+        id: 7,
         title: "Scorched Wine Rack", 
         preview: "Wine Rack/winerack.jpg"
     },
 
     {
-        id: 6,
+        id: 8,
         title: "Fendi Capsule Submission", 
         preview: "fendi/table.png"
     }
