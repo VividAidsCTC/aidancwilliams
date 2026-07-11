@@ -9,7 +9,7 @@ const projects = [
     {
         id: 0,
         title: "Lamp", 
-        preview: "Lamp/lamp_black.png"
+        preview: "Lamp/lamp_black.jpg"
     },
 
     {
